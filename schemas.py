@@ -21,36 +21,28 @@ class User(UserBase):
 class EventBase(BaseModel):
     title: str
     description: str
+    price: float
     total_tickets: int
+    location: str
+    date_time: datetime
 
 
 class EventCreate(EventBase):
-    user_id: int
-    booking_date: date
+    pass
 
 
 class Event(EventBase):
     id: int
-    # organizer: User
+    organizer: int
     available_tickets: int
-    booking_date: datetime
 
     class Config:
         orm_mode = True
 
 
-class TicketBase(BaseModel):
-    price: int
-
-
-class TicketCreate(TicketBase):
-    user_id: int
-    event_id: int
-
-
-class Ticket(TicketBase):
+class Ticket(BaseModel):
     id: int
-    purchased_date: str
+    purchased_date: datetime
     event: Event
     user: User
 
