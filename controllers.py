@@ -17,7 +17,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: schemas.UserCreateRequest):
     hashed_password = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
     db_user = models.User(username=user.username, password=hashed_password)
     db.add(db_user)
@@ -45,7 +45,7 @@ def get_events(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Event).offset(skip).limit(limit).all()
 
 
-def create_event(db: Session, event: schemas.EventCreate, user_id: int):
+def create_event(db: Session, event: schemas.EventRequest, user_id: int):
     db_event = models.Event(
         title=event.title,
         description=event.description,
@@ -62,7 +62,7 @@ def create_event(db: Session, event: schemas.EventCreate, user_id: int):
     return db_event
 
 
-def update_event(db: Session, event_data, event_id: int):
+def update_event(db: Session, event_data: dict, event_id: int):
     event = db.query(models.Event).filter(models.Event.id == event_id).first()
     for key, value in event_data.items():
         setattr(event, key, value)

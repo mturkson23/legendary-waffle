@@ -6,11 +6,11 @@ class UserBase(BaseModel):
     username: str
 
 
-class UserCreate(UserBase):
+class UserCreateRequest(UserBase):
     password: str
 
 
-class User(UserBase):
+class UserResponse(UserBase):
     id: int
     events: list = []
 
@@ -18,7 +18,7 @@ class User(UserBase):
         orm_mode = True
 
 
-class EventBase(BaseModel):
+class EventRequest(BaseModel):
     title: str
     description: str
     price: float
@@ -27,11 +27,7 @@ class EventBase(BaseModel):
     date_time: datetime
 
 
-class EventCreate(EventBase):
-    pass
-
-
-class Event(EventBase):
+class EventResponse(EventRequest):
     id: int
     organizer: int
     available_tickets: int
@@ -40,11 +36,11 @@ class Event(EventBase):
         orm_mode = True
 
 
-class Ticket(BaseModel):
+class TicketRequest(BaseModel):
     id: int
     purchased_date: datetime
-    event: Event
-    user: User
+    event: EventResponse
+    user: UserResponse
 
     class Config:
         orm_mode = True

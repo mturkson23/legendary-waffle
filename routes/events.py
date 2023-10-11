@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
 from fastapi.encoders import jsonable_encoder
 from database import get_db
-from schemas import Event, EventCreate, User
+from schemas import EventResponse, EventRequest, UserResponse
 from controllers import (
     create_event,
     get_events,
@@ -30,9 +30,9 @@ def get_event_booking(booking_id: int, db: Session = Depends(get_db)):
     return event
 
 
-@router.post("/", response_model=Event)
+@router.post("/", response_model=EventResponse)
 def create_event_booking(
-    booking: EventCreate,
+    booking: EventRequest,
     db: Session = Depends(get_db),
     token: str = Depends(get_current_user),
 ):
@@ -44,7 +44,7 @@ def get_event_booking_organizer(booking_id: int, db: Session = Depends(get_db)):
     organizer = get_event_organizer(db=db, event_id=booking_id)
     if organizer is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    return User(username=organizer.username, id=organizer.id)
+    return UserResponse(username=organizer.username, id=organizer.id)
 
 
 @router.patch("/{booking_id}")
@@ -74,7 +74,7 @@ def delete_event_booking(
     event_item = get_event(db=db, event_id=booking_id)
     if event_item is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    if event_item.organizer_id != token.id:
+    if event_item.organizer != token.id:
         raise HTTPException(
             status_code=401, detail="You are not authorized to delete this event"
         )

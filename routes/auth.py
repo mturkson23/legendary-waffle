@@ -4,7 +4,7 @@ import bcrypt
 from sqlalchemy.orm import Session
 
 from controllers import get_user_by_username, create_user
-from schemas import UserCreate, User
+from schemas import UserCreateRequest, UserResponse
 from database import get_db
 
 router = APIRouter(prefix="/auth")
@@ -15,7 +15,7 @@ def get_current_user(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
     user = get_user_by_username(db, username=token)
-    return User(username=user.username, id=user.id)
+    return UserResponse(username=user.username, id=user.id)
 
 
 @router.post("/login")
@@ -37,7 +37,7 @@ def login(
 
 
 @router.post("/register")
-def register(user: UserCreate, db: Session = Depends(get_db)):
+def register(user: UserCreateRequest, db: Session = Depends(get_db)):
     db_user = get_user_by_username(db, username=user.username)
     if db_user:
         raise HTTPException(
@@ -48,7 +48,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/profile")
-def get_my_profile(current_user: User = Depends(get_current_user)):
+def get_my_profile(current_user: UserResponse = Depends(get_current_user)):
     return current_user
 
 # To be checked out later
