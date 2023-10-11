@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
-from fastapi.encoders import jsonable_encoder
 from database import get_db
 from schemas import EventResponse, EventRequest, UserResponse
 from controllers import (
     create_event,
     get_events,
     get_event,
+    delete_event,
     get_event_organizer,
     update_event,
     create_ticket,
@@ -24,10 +24,10 @@ def get_event_bookings(db: Session = Depends(get_db)):
 
 @router.get("/{booking_id}")
 def get_event_booking(booking_id: int, db: Session = Depends(get_db)):
-    event = get_event(db=db, event_id=booking_id)
-    if event is None:
+    db_event = get_event(db=db, event_id=booking_id)
+    if db_event is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    return event
+    return db_event
 
 
 @router.post("/", response_model=EventResponse)
@@ -41,10 +41,10 @@ def create_event_booking(
 
 @router.get("/{booking_id}/organizer")
 def get_event_booking_organizer(booking_id: int, db: Session = Depends(get_db)):
-    organizer = get_event_organizer(db=db, event_id=booking_id)
-    if organizer is None:
+    db_organizer = get_event_organizer(db=db, event_id=booking_id)
+    if db_organizer is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    return UserResponse(username=organizer.username, id=organizer.id)
+    return UserResponse(username=db_organizer.username, id=db_organizer.id)
 
 
 @router.patch("/{booking_id}")
@@ -54,10 +54,10 @@ def update_event_booking(
     db: Session = Depends(get_db),
     token: str = Depends(get_current_user),
 ):
-    event_item = get_event(db=db, event_id=booking_id)
-    if event_item is None:
+    db_event_item = get_event(db=db, event_id=booking_id)
+    if db_event_item is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    if event_item.organizer != token.id:
+    if db_event_item.organizer != token.id:
         raise HTTPException(
             status_code=401, detail="You are not authorized to update this event"
         )
@@ -71,15 +71,14 @@ def delete_event_booking(
     db: Session = Depends(get_db),
     token: str = Depends(get_current_user),
 ):
-    event_item = get_event(db=db, event_id=booking_id)
-    if event_item is None:
+    db_event_item = get_event(db=db, event_id=booking_id)
+    if db_event_item is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    if event_item.organizer != token.id:
+    if db_event_item.organizer != token.id:
         raise HTTPException(
             status_code=401, detail="You are not authorized to delete this event"
         )
-    db.delete(event_item)
-    db.commit()
+    delete_event(db=db, event_id=booking_id)
     return {"message": "Event deleted successfully"}
 
 
@@ -89,8 +88,8 @@ def buy_event_ticket(
     db: Session = Depends(get_db),
     token: str = Depends(get_current_user),
 ):
-    event_item = get_event(db=db, event_id=booking_id)
-    if event_item is None:
+    db_event_item = get_event(db=db, event_id=booking_id)
+    if db_event_item is None:
         raise HTTPException(status_code=404, detail="Event not found")
     ticket = create_ticket(db=db, user_id=token.id, event_id=booking_id)
     if ticket is None:

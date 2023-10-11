@@ -10,16 +10,15 @@ router = APIRouter(prefix="/tickets")
 
 @router.get("/{ticket_id}", response_model=TicketRequest)
 def read_ticket(ticket_id: int, db: Session = Depends(get_db)):
-    ticket = get_ticket(db=db, ticket_id=ticket_id)
-    if ticket is None:
+    db_ticket = get_ticket(db=db, ticket_id=ticket_id)
+    if db_ticket is None:
         raise HTTPException(status_code=404, detail="Ticket not found")
-    return ticket
+    return db_ticket
 
 
 @router.get("/", response_model=list[TicketRequest])
 def read_tickets(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    tickets = get_tickets(db=db, skip=skip, limit=limit)
-    return tickets
+    return get_tickets(db=db, skip=skip, limit=limit)
 
 
 # To be checked out later

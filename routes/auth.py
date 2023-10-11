@@ -14,16 +14,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 def get_current_user(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
-    user = get_user_by_username(db, username=token)
-    return UserResponse(username=user.username, id=user.id)
+    db_user = get_user_by_username(db, username=token)
+    return UserResponse(username=db_user.username, id=db_user.id)
 
 
 @router.post("/login")
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
-    user = get_user_by_username(db, username=form_data.username)
-    if not user:
+    db_user = get_user_by_username(db, username=form_data.username)
+    if not db_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Incorrect username or password",
@@ -33,7 +33,7 @@ def login(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Incorrect username or password",
         )
-    return {"access_token": user.username, "token_type": "bearer"}
+    return {"access_token": db_user.username, "token_type": "bearer"}
 
 
 @router.post("/register")
