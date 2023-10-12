@@ -41,9 +41,10 @@ def create_event_booking(
 
 @router.get("/{booking_id}/organizer")
 def get_event_booking_organizer(booking_id: int, db: Session = Depends(get_db)):
-    db_organizer = get_event_organizer(db=db, event_id=booking_id)
-    if db_organizer is None:
+    db_event = get_event(db=db, event_id=booking_id)
+    if db_event is None:
         raise HTTPException(status_code=404, detail="Event not found")
+    db_organizer = get_event_organizer(db=db, event_id=booking_id)
     return UserResponse(username=db_organizer.username, id=db_organizer.id)
 
 
