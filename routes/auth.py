@@ -28,7 +28,7 @@ def login(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Incorrect username or password",
         )
-    if not bcrypt.checkpw(form_data.password.encode("utf-8"), user.password):
+    if not bcrypt.checkpw(form_data.password.encode("utf-8"), db_user.password):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Incorrect username or password",
