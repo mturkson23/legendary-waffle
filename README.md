@@ -41,3 +41,9 @@ Run the following commands to start the FastAPI server and initialize the SQLite
 uvicorn app.main:app --reload
 ```
 Open your browser and visit http://127.0.0.1:8000/docs to access the documentation. Use the /docs endpoint to interact with the API and create sample data.
+
+### Running the tests
+Run the following command to run the tests:
+```bash
+pytest
+```

@@ -15,6 +15,11 @@ def get_current_user(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
     db_user = get_user_by_username(db, username=token)
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Incorrect username or password",
+        )
     return UserResponse(username=db_user.username, id=db_user.id)
 
 
