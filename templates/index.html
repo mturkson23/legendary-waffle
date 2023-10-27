@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="navbar">
+    <a href="#">Home</a>
+    <a href="#">Events</a>
+    {% if user.is_authenticated %}
+    <a href="#">Dashboard</a>
+    <a href="#">Logout</a>
+    {% else %}
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+    {% endif %}
+</div>
+
+<div class="container">
+    <h1>Welcome to EventHub</h1>
+    <p>Discover and book exciting events in your city with ease.</p>
+    <a class="btn" href="#">Explore Events</a>
+</div>
+
+
+
+{% endblock %}
