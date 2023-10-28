@@ -38,7 +38,7 @@ pip install -r requirements.txt
 Run the following commands to start the FastAPI server and initialize the SQLite database:
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn app:app --reload
 ```
 Open your browser and visit http://127.0.0.1:8000/docs to access the documentation. Use the /docs endpoint to interact with the API and create sample data.
 
