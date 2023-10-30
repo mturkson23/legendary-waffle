@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="container w-50 mt-4">
+    <form method="post">
+        <h1 class="h3 mb-3 fw-normal">Buy Tickets</h1>
+
+        {% csrf_token %}
+
+        <input class="form-control" type="number" name="number_of_tickets">
+
+        <button type="submit" class="btn btn-primary w-100 py-2 mt-3">Get tickets</button>
+
+    </form>
+</div>
+
+{% endblock %}

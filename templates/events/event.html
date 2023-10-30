@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.name }}{% endblock %}
+
+{% block content %}
+<div class="container w-50">
+    <h1 class="h3 mb-3 fw-normal">{{ event.title }}</h1>
+
+    <h4 class="h5 mb-2 fw-normal">Description</h4>
+    <p class="text-body-primary">{{ event.description }}</p>
+    <p class="text-body-primary">Location: {{ event.location}}</p>
+    <p>Date: {{ event.date_time }}</p>
+    <p>Number of available tickets: {{ event.available_tickets}}</p>
+    <p>Price: ${{event.price}}</p>
+
+    <a class="btn btn-primary w-100 py-2" href="{% url 'get_ticket' event.id %}">Book Tickets</a>
+
+    {% if event.organizer == user %}
+    <div class="btn-group" role="group">
+        <a class="btn btn-success m-2" href="{% url 'event_update' event.id %}">Edit</a>
+        <a class="btn btn-danger m-2" href="{% url 'event_delete' event.id %}">Delete</a>
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

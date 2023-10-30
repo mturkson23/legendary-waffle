@@ -52,7 +52,7 @@ p {
     color: #666;
 }
 
-.btn {
+button {
     display: inline-block;
     background-color: #007BFF;
     color: #fff;
@@ -65,6 +65,28 @@ p {
     margin-top: 20px;
 }
 
-.btn:hover {
+button:hover {
     background-color: #0056b3;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.helptext {
+    display: none;
+    color: #FF0000;
+}
+
+.helptext.active {
+    display: inline;
 }

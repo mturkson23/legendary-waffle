@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<main class="container">
+    <h1>My Events</h1>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        {% for event in events %}
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ event.title }}</h4>
+              </div>
+              <div class="card-body">
+                <h1 class="card-title pricing-card-title">${{event.price}}</h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                  <li>{{event.available_tickets}} tickets available</li>
+                </ul>
+                <a href="{% url 'event' event.id %}" class="w-100 btn btn-lg btn-outline-primary">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
