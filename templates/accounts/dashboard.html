@@ -5,6 +5,7 @@
     <h1 class="h2">Dashboard</h1>
     <h4>My Events</h4>
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <a class="btn btn-primary w-100 m-3" href="{% url 'event_create' %}">Create Event</a>
         {% for event in user_events %}
         <div class="col">
             <div class="card mb-4 rounded-3 shadow-sm">

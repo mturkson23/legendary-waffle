@@ -15,10 +15,10 @@ class EventForm(forms.ModelForm):
             "price",
         ]
         widgets = {
-            "title": forms.TextInput(attrs={"class": "form-control"}),
-            "description": forms.Textarea(attrs={"class": "form-control"}),
-            "date_time": forms.DateTimeInput(attrs={"class": "form-control"}),
-            "location": forms.TextInput(attrs={"class": "form-control"}),
-            "total_tickets": forms.NumberInput(attrs={"class": "form-control"}),
-            "price": forms.NumberInput(attrs={"class": "form-control"}),
+            "title": forms.TextInput(attrs={"class": "form-control", "placeholder": "Event Title"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "placeholder": "Event Description"}),
+            "date_time": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local", "placeholder": "Event Date & Time"}),
+            "location": forms.TextInput(attrs={"class": "form-control", "placeholder": "Event Location"}),
+            "total_tickets": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Total Tickets"}),
+            "price": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Ticket Price"}),
         }
